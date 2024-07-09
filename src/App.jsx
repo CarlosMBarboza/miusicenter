@@ -1,11 +1,21 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Guitar } from "./components/Guitar.jsx";
 import { Header } from "./components/Header.jsx";
 import { db } from './data/db.js'
 
 export const App = () => {
+    const initialCart =()=>{
+        const localStorageCart = JSON.parse(localStorage.getItem('cart'))
+        return localStorageCart ? JSON.parse(localStorage.getItem) : []
+        
+    }
     const [data, setData] = useState(db)
-    const [cart, setCart] = useState([])
+    const [cart, setCart] = useState(initialCart)
+
+    useEffect(() =>{
+        localStorage.setItem('cart', JSON.stringify(cart))
+    },[cart])
+
 
     function addToCart(item) {
         const itemExists = cart.findIndex(guitar => guitar.id === item.id)
@@ -28,6 +38,7 @@ export const App = () => {
             updatedCart[itemIndex].quantity++
             setCart(updatedCart)
         }
+
     }
     function decreaseQuantity(id){
         const itemIndex = cart.findIndex(guitar => guitar.id === id)
@@ -37,14 +48,18 @@ export const App = () => {
             setCart(updatedCart)
         }
     }
-
+    function clearCart(){
+        setCart([])
+    }
+   
     return (
         <>
             <Header
             cart={cart}
             removeFromCart={removeFromCart}
             increaseQuantity={increaseQuantity}
-            decreaseQuantity={decreaseQuantity}/>
+            decreaseQuantity={decreaseQuantity}
+            clearCart={clearCart}/>
 
             <main className="container-xl mt-5">
                 <h2 className="text-center">Nuestra Colección</h2>
