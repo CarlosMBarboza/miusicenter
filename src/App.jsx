@@ -9,7 +9,7 @@ export const App = () => {
         return localStorageCart ? JSON.parse(localStorage.getItem) : []
         
     }
-    const [data, setData] = useState(db)
+    const [data] = useState(db)
     const [cart, setCart] = useState(initialCart)
 
     useEffect(() =>{
